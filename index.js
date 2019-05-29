@@ -45,9 +45,8 @@ const rpcConfig = {
     },
     pipeline: (params) => {
       return [
-        //['samtools', 'view', '-b', params.url],
-        ['bamstatsAlive', '-u', '500', '-k', '1', '-'],
-        //['bamstatsAlive', '-u', '500', '-k', '1', '-r', regStr],
+        ['samtools', 'view', '-b', params.url],
+        ['bamstatsAlive', '-u', '500', '-k', '1'],
       ];
     },
   },
