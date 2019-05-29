@@ -26,6 +26,32 @@ const rpcConfig = {
     },
   },
 
+  bamReadDepther: {
+    params: {
+      url: 'URL',
+    },
+    pipeline: (params) => {
+      return [
+        ['curl', params.url],
+        ['bamReadDepther'],
+      ];
+    },
+  },
+
+  bamStatsAlive: {
+    params: {
+      url: 'URL',
+      //regions: 'String',
+    },
+    pipeline: (params) => {
+      return [
+        //['samtools', 'view', '-b', params.url],
+        ['bamstatsAlive', '-u', '500', '-k', '1', '-'],
+        //['bamstatsAlive', '-u', '500', '-k', '1', '-r', regStr],
+      ];
+    },
+  },
+
 };
 
 
