@@ -41,12 +41,16 @@ const rpcConfig = {
   bamStatsAlive: {
     params: {
       url: 'URL',
-      //regions: 'String',
+      regions: 'String',
+      regionStr: 'String',
     },
     pipeline: (params) => {
+
+      const regions = params.regions.split(' ');
+
       return [
-        ['samtools', 'view', '-b', params.url],
-        ['bamstatsAlive', '-u', '500', '-k', '1'],
+        ['samtools', 'view', '-b', params.url].concat(regions),
+        ['bamstatsAlive', '-u', '500', '-k', '1', '-r', params.regionStr],
       ];
     },
   },
