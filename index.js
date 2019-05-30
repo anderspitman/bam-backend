@@ -14,18 +14,6 @@ const rpcConfig = {
     returnStream: false,
   },
 
-  getAlignment: {
-    params: {
-      url: 'URL',
-      chr: 'String',
-    },
-    pipeline: (params) => {
-      return [
-        ['samtools', 'view', params.url, params.chr],
-      ];
-    },
-  },
-
   bamReadDepther: {
     params: {
       url: 'URL',
