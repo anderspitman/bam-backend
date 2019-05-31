@@ -1,4 +1,4 @@
-const { RPCServer } = require('iobio-backend');
+const { RPCServer, call } = require('iobio-backend');
 
 const rpcConfig = {
 
@@ -6,27 +6,19 @@ const rpcConfig = {
     params: {
       url: 'URL',
     },
-    pipeline: (params) => {
-      return [
-        ['samtools', 'view', '-H', params.url],
-      ];
-    },
-    returnStream: false,
+    pipeline: (params) => call('samtools', ['view', '-H', params.url]),
   },
 
   bamReadDepther: {
     params: {
       url: 'URL',
     },
-    pipeline: (params) => {
-      return [
-        ['curl', params.url],
-        ['bamReadDepther'],
-      ];
-    },
+    pipeline: (params) =>
+      call('curl', [params.url], { ignoreStderr: true })
+        .pipe(call('bamReadDepther')),
   },
 
-  bamStatsAlive: {
+  bamstatsAlive: {
     params: {
       url: 'URL',
       regions: 'String',
@@ -36,10 +28,9 @@ const rpcConfig = {
 
       const regions = params.regions.split(' ');
 
-      return [
-        ['samtools', 'view', '-b', params.url].concat(regions),
-        ['bamstatsAlive', '-u', '500', '-k', '1', '-r', params.regionStr],
-      ];
+      return call('samtools', ['view', '-b', params.url].concat(regions))
+        .pipe(call('samtools', ['view', '-b', params.url].concat(regions)))
+        .pipe(call('bamstatsAlive', ['-u', '500', '-k', '1', '-r', params.regionStr]));
     },
   },
 
